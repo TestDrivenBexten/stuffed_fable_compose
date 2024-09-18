@@ -4,11 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,7 +39,7 @@ fun DieButton(dieOrdinal: Int) {
 }
 
 @Composable
-fun DiceSelection(diceSelected: Int) {
+fun DiceSelectionPanelRow(diceSelected: Int) {
     LazyRow {
         items(diceSelected) { dice -> DieButton(dice + 1) }
     }
@@ -48,9 +47,9 @@ fun DiceSelection(diceSelected: Int) {
 
 @Preview(showBackground = true)
 @Composable
-fun DiceSelectionPreview() {
+fun DiceSelectionRowPreview() {
     Stuffed_fable_composeTheme {
-        DiceSelection(3)
+        DiceSelectionPanelRow(3)
     }
 }
 
@@ -67,5 +66,22 @@ fun DieButtonPreview() {
 fun StuffedFablesHeaderPreview() {
     Stuffed_fable_composeTheme {
         StuffedFablesHeader()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DiceSelectionPanelPreview() {
+    Stuffed_fable_composeTheme {
+        Column {
+            Text(text = "Dice Drawn")
+            DiceSelectionPanelRow(5)
+            DiceSelectionPanelRow(5)
+            DiceSelectionPanelRow(5)
+            DiceSelectionPanelRow(5)
+            DiceSelectionPanelRow(5)
+            DiceSelectionPanelRow(5)
+            DiceSelectionPanelRow(5)
+        }
     }
 }
