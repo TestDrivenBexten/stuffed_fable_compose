@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -32,9 +33,24 @@ fun StuffedFablesHeader() {
 }
 
 @Composable
-fun DieButton() {
+fun DieButton(dieOrdinal: Int) {
     Button(onClick = {}, shape = RoundedCornerShape(4.dp)) {
-        Text(text = "1")
+        Text(text = dieOrdinal.toString())
+    }
+}
+
+@Composable
+fun DiceSelection(diceSelected: Int) {
+    LazyRow {
+        items(diceSelected) { dice -> DieButton(dice + 1) }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DiceSelectionPreview() {
+    Stuffed_fable_composeTheme {
+        DiceSelection(3)
     }
 }
 
@@ -42,7 +58,7 @@ fun DieButton() {
 @Composable
 fun DieButtonPreview() {
     Stuffed_fable_composeTheme {
-        DieButton()
+        DieButton(3)
     }
 }
 
@@ -51,19 +67,5 @@ fun DieButtonPreview() {
 fun StuffedFablesHeaderPreview() {
     Stuffed_fable_composeTheme {
         StuffedFablesHeader()
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DiceDrawnPreview() {
-    Stuffed_fable_composeTheme {
-        Row {
-            DieButton()
-            DieButton()
-            DieButton()
-            DieButton()
-            DieButton()
-        }
     }
 }
