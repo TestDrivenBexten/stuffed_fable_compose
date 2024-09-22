@@ -62,9 +62,9 @@ fun StuffedFablesHeader() {
 }
 
 @Composable
-fun DieButton(dieOrdinal: Int, buttonColor: Color, isSelected: Boolean) {
+fun DieButton(dieOrdinal: Int, buttonColor: Color, isSelected: Boolean, updateDiceSelectionCount: (Int) -> Unit) {
     OutlinedButton (
-        onClick = {},
+        onClick = { updateDiceSelectionCount(dieOrdinal) },
         shape = RoundedCornerShape(4.dp),
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
 
@@ -77,36 +77,37 @@ fun DieButton(dieOrdinal: Int, buttonColor: Color, isSelected: Boolean) {
 }
 
 @Composable
-fun DiceSelectionPanelRow(diceSelection: DiceSelection) {
+fun DiceSelectionPanelRow(diceSelection: DiceSelection, updateDiceSelectionCount: (Int) -> Unit) {
     val diceToChooseFrom = diceSelection.maxDice
     val buttonColor = getDieUIColor(diceSelection.die.dieColor)
     LazyRow {
         items(diceToChooseFrom) {
-            dice -> DieButton(dice + 1, buttonColor, dice < diceSelection.selectedCount)
+            dice -> DieButton(dice + 1, buttonColor, dice < diceSelection.selectedCount, updateDiceSelectionCount)
         }
     }
 }
 
 @Composable
-fun DiceSelectionPanelRow(diceSelected: Int, buttonColor: Color) {
+fun DiceSelectionPanelRow(diceSelected: Int, buttonColor: Color, updateDiceSelectionCount: (Int) -> Unit) {
     LazyRow {
-        items(diceSelected) { dice -> DieButton(dice + 1, buttonColor, true) }
+        items(diceSelected) { dice -> DieButton(dice + 1, buttonColor, true, updateDiceSelectionCount) }
     }
 }
 
 @Composable
 fun DiceSelectionPanel() {
     var isExpanded by remember { mutableStateOf(true) }
+    val updateDiceSelectionCount = { x: Int -> println(x) }
     Column {
         Text(text = "Dice Drawn", modifier = Modifier.clickable { isExpanded = !isExpanded })
         if (isExpanded) {
-            DiceSelectionPanelRow(5, Color.Black)
-            DiceSelectionPanelRow(5, Color.White)
-            DiceSelectionPanelRow(5, Color.Red)
-            DiceSelectionPanelRow(5, Color.Green)
-            DiceSelectionPanelRow(5, Color.Blue)
-            DiceSelectionPanelRow(5, Color.Yellow)
-            DiceSelectionPanelRow(5, Color.Magenta)
+            DiceSelectionPanelRow(5, Color.Black, updateDiceSelectionCount)
+            DiceSelectionPanelRow(5, Color.White, updateDiceSelectionCount)
+            DiceSelectionPanelRow(5, Color.Red, updateDiceSelectionCount)
+            DiceSelectionPanelRow(5, Color.Green, updateDiceSelectionCount)
+            DiceSelectionPanelRow(5, Color.Blue, updateDiceSelectionCount)
+            DiceSelectionPanelRow(5, Color.Yellow, updateDiceSelectionCount)
+            DiceSelectionPanelRow(5, Color.Magenta, updateDiceSelectionCount)
         }
     }
 }
@@ -115,17 +116,18 @@ fun DiceSelectionPanel() {
 @Composable
 fun DiceSelectionRowPreview() {
     Stuffed_fable_composeTheme {
-        DiceSelectionPanelRow(selectedBlackDice)
+        DiceSelectionPanelRow(selectedBlackDice, { x: Int -> println(x) })
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DieButtonPreview() {
+    val updateDiceSelectionCount = { x: Int -> println(x) }
     Stuffed_fable_composeTheme {
         Column {
-            DieButton(3, Color.Black, true)
-            DieButton(3, Color.White, false)
+            DieButton(3, Color.Black, true, updateDiceSelectionCount)
+            DieButton(3, Color.White, false, updateDiceSelectionCount)
         }
     }
 }
