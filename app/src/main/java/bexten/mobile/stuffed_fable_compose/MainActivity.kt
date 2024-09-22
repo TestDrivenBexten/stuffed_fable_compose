@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,19 +42,20 @@ fun StuffedFablesHeader() {
 
 @Composable
 fun DieButton(dieOrdinal: Int, buttonColor: Color) {
-    Button(
+    OutlinedButton (
         onClick = {},
         shape = RoundedCornerShape(4.dp),
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
     ) {
-        Text(text = dieOrdinal.toString())
+        val textColor = if (buttonColor == Color.Black) Color.White else Color.Black
+        Text(text = dieOrdinal.toString(), color = textColor)
     }
 }
 
 @Composable
-fun DiceSelectionPanelRow(diceSelected: Int) {
+fun DiceSelectionPanelRow(diceSelected: Int, buttonColor: Color = Color.Black) {
     LazyRow {
-        items(diceSelected) { dice -> DieButton(dice + 1, Color.Black) }
+        items(diceSelected) { dice -> DieButton(dice + 1, buttonColor) }
     }
 }
 
@@ -63,13 +65,13 @@ fun DiceSelectionPanel() {
     Column {
         Text(text = "Dice Drawn", modifier = Modifier.clickable { isExpanded = !isExpanded })
         if (isExpanded) {
-            DiceSelectionPanelRow(5)
-            DiceSelectionPanelRow(5)
-            DiceSelectionPanelRow(5)
-            DiceSelectionPanelRow(5)
-            DiceSelectionPanelRow(5)
-            DiceSelectionPanelRow(5)
-            DiceSelectionPanelRow(5)
+            DiceSelectionPanelRow(5, Color.Black)
+            DiceSelectionPanelRow(5, Color.White)
+            DiceSelectionPanelRow(5, Color.Red)
+            DiceSelectionPanelRow(5, Color.Green)
+            DiceSelectionPanelRow(5, Color.Blue)
+            DiceSelectionPanelRow(5, Color.Yellow)
+            DiceSelectionPanelRow(5, Color.Magenta)
         }
     }
 }
