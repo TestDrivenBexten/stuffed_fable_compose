@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -66,8 +68,7 @@ fun DieButton(dieOrdinal: Int, buttonColor: Color, isSelected: Boolean, updateDi
     OutlinedButton (
         onClick = { updateDiceSelectionCount(dieOrdinal) },
         shape = RoundedCornerShape(4.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = buttonColor),
-
+        colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
     ) {
         if (isSelected) {
             val textColor = if (buttonColor == Color.Black) Color.White else Color.Black
@@ -80,9 +81,14 @@ fun DieButton(dieOrdinal: Int, buttonColor: Color, isSelected: Boolean, updateDi
 fun DiceSelectionPanelRow(diceSelection: DiceSelection, updateDiceSelectionCount: (Int) -> Unit) {
     val diceToChooseFrom = diceSelection.maxDice
     val buttonColor = getDieUIColor(diceSelection.die.dieColor)
-    LazyRow {
-        items(diceToChooseFrom) {
-            dice -> DieButton(dice + 1, buttonColor, dice < diceSelection.selectedCount, updateDiceSelectionCount)
+    Row {
+        LazyRow {
+            items(diceToChooseFrom) {
+                    dice -> DieButton(dice + 1, buttonColor, dice < diceSelection.selectedCount, updateDiceSelectionCount)
+            }
+        }
+        OutlinedButton(onClick = { updateDiceSelectionCount(0) }) {
+            Text(text = "X")
         }
     }
 }
