@@ -97,11 +97,14 @@ fun DiceSelectionPanelRow(diceSelected: Int, buttonColor: Color, updateDiceSelec
 @Composable
 fun DiceSelectionPanel() {
     var isExpanded by remember { mutableStateOf(true) }
+    var selectedBlackDice by remember { mutableStateOf(selectedBlackDice) }
+    val updateBlackDiceSelection: (Int) -> Unit = { x: Int -> selectedBlackDice = selectedBlackDice.copy(selectedCount = x) }
+
     val updateDiceSelectionCount = { x: Int -> println(x) }
     Column {
         Text(text = "Dice Drawn", modifier = Modifier.clickable { isExpanded = !isExpanded })
         if (isExpanded) {
-            DiceSelectionPanelRow(5, Color.Black, updateDiceSelectionCount)
+            DiceSelectionPanelRow(selectedBlackDice, updateBlackDiceSelection)
             DiceSelectionPanelRow(5, Color.White, updateDiceSelectionCount)
             DiceSelectionPanelRow(5, Color.Red, updateDiceSelectionCount)
             DiceSelectionPanelRow(5, Color.Green, updateDiceSelectionCount)
