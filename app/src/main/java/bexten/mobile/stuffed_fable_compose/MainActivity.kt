@@ -64,7 +64,10 @@ fun StuffedFablesHeader() {
 }
 
 @Composable
-fun DieButton(dieOrdinal: Int, buttonColor: Color, isSelected: Boolean, updateDiceSelectionCount: (Int) -> Unit) {
+fun DieButton(dieOrdinal: Int,
+              buttonColor: Color,
+              isSelected: Boolean,
+              updateDiceSelectionCount: (Int) -> Unit) {
     OutlinedButton (
         onClick = { updateDiceSelectionCount(dieOrdinal) },
         shape = RoundedCornerShape(4.dp),
@@ -84,7 +87,8 @@ fun DiceSelectionPanelRow(diceSelection: DiceSelection, updateDiceSelectionCount
     Row {
         LazyRow {
             items(diceToChooseFrom) {
-                    dice -> DieButton(dice + 1, buttonColor, dice < diceSelection.selectedCount, updateDiceSelectionCount)
+                    dice -> DieButton(dice + 1, buttonColor,
+                    dice < diceSelection.selectedCount, updateDiceSelectionCount)
             }
         }
         OutlinedButton(onClick = { updateDiceSelectionCount(0) }) {
@@ -104,7 +108,8 @@ fun DiceSelectionPanelRow(diceSelected: Int, buttonColor: Color, updateDiceSelec
 fun DiceSelectionPanel() {
     var isExpanded by remember { mutableStateOf(true) }
     var selectedBlackDice by remember { mutableStateOf(selectedBlackDice) }
-    val updateBlackDiceSelection: (Int) -> Unit = { x: Int -> selectedBlackDice = selectedBlackDice.copy(selectedCount = x) }
+    val updateBlackDiceSelection: (Int) -> Unit =
+        { x: Int -> selectedBlackDice = selectedBlackDice.copy(selectedCount = x) }
 
     val updateDiceSelectionCount = { x: Int -> println(x) }
     Column {
