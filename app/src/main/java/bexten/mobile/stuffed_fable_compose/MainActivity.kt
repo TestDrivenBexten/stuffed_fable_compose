@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -42,9 +41,31 @@ fun getDieUIColor(dieColor: DieColor): Color {
 
 data class Die(val faceValues: List<Int>, val dieColor: DieColor)
 data class DiceSelection(val die: Die, val selectedCount: Int, val maxDice: Int)
+data class DiceBag(val diceSelectionList: List<DiceSelection>)
 
-val blackDie = Die(listOf(1, 2, 3, 4, 5, 6), DieColor.BLACK)
-val selectedBlackDice = DiceSelection(blackDie, 3, 5)
+fun createD6Die(dieColor: DieColor): Die {
+    return Die(listOf(1, 2, 3, 4, 5, 6), dieColor)
+}
+
+val blackDie = createD6Die(DieColor.BLACK)
+val whiteDie = createD6Die(DieColor.WHITE)
+val redDie = createD6Die(DieColor.RED)
+val greenDie = createD6Die(DieColor.GREEN)
+val yellowDie = createD6Die(DieColor.YELLOW)
+val blueDie = createD6Die(DieColor.BLUE)
+val purpleDie = createD6Die(DieColor.PURPLE)
+
+var diceBag = DiceBag(
+    diceSelectionList = listOf(
+        DiceSelection(blackDie, 0, 5),
+        DiceSelection(whiteDie, 0, 5),
+        DiceSelection(redDie, 0, 5),
+        DiceSelection(greenDie, 0, 5),
+        DiceSelection(yellowDie, 0, 5),
+        DiceSelection(blueDie, 0, 5),
+        DiceSelection(purpleDie, 0, 5),
+    )
+)
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +73,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Stuffed_fable_composeTheme {
-                StuffedFablesHeader()
+                DiceSelectionPanel()
             }
         }
     }
@@ -98,30 +119,18 @@ fun DiceSelectionPanelRow(diceSelection: DiceSelection, updateDiceSelectionCount
 }
 
 @Composable
-fun DiceSelectionPanelRow(diceSelected: Int, buttonColor: Color, updateDiceSelectionCount: (Int) -> Unit) {
-    LazyRow {
-        items(diceSelected) { dice -> DieButton(dice + 1, buttonColor, true, updateDiceSelectionCount) }
-    }
-}
-
-@Composable
 fun DiceSelectionPanel() {
     var isExpanded by remember { mutableStateOf(true) }
-    var selectedBlackDice by remember { mutableStateOf(selectedBlackDice) }
     val updateBlackDiceSelection: (Int) -> Unit =
-        { x: Int -> selectedBlackDice = selectedBlackDice.copy(selectedCount = x) }
+        { x: Int -> {  } }
 
     val updateDiceSelectionCount = { x: Int -> println(x) }
     Column {
         Text(text = "Dice Drawn", modifier = Modifier.clickable { isExpanded = !isExpanded })
         if (isExpanded) {
-            DiceSelectionPanelRow(selectedBlackDice, updateBlackDiceSelection)
-            DiceSelectionPanelRow(5, Color.White, updateDiceSelectionCount)
-            DiceSelectionPanelRow(5, Color.Red, updateDiceSelectionCount)
-            DiceSelectionPanelRow(5, Color.Green, updateDiceSelectionCount)
-            DiceSelectionPanelRow(5, Color.Blue, updateDiceSelectionCount)
-            DiceSelectionPanelRow(5, Color.Yellow, updateDiceSelectionCount)
-            DiceSelectionPanelRow(5, Color.Magenta, updateDiceSelectionCount)
+            diceBag.diceSelectionList.map { diceSelection ->
+                DiceSelectionPanelRow(diceSelection, updateDiceSelectionCount)
+            }
         }
     }
 }
@@ -130,6 +139,7 @@ fun DiceSelectionPanel() {
 @Composable
 fun DiceSelectionRowPreview() {
     Stuffed_fable_composeTheme {
+        val selectedBlackDice = DiceSelection(blackDie, 3, 5)
         DiceSelectionPanelRow(selectedBlackDice, { x: Int -> println(x) })
     }
 }
@@ -139,7 +149,7 @@ fun DiceSelectionRowPreview() {
 fun DieButtonPreview() {
     val updateDiceSelectionCount = { x: Int -> println(x) }
     Stuffed_fable_composeTheme {
-        Column {
+        Row {
             DieButton(3, Color.Black, true, updateDiceSelectionCount)
             DieButton(3, Color.White, false, updateDiceSelectionCount)
         }
