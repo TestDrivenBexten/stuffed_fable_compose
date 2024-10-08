@@ -1,5 +1,8 @@
 package bexten.mobile.stuffed_fable_compose
 
+import arrow.core.Either
+import arrow.core.right
+
 enum class DieColor {
     BLACK, WHITE, RED, GREEN, YELLOW, BLUE, PURPLE
 }
@@ -19,3 +22,16 @@ val greenDie = createD6Die(DieColor.GREEN)
 val yellowDie = createD6Die(DieColor.YELLOW)
 val blueDie = createD6Die(DieColor.BLUE)
 val purpleDie = createD6Die(DieColor.PURPLE)
+
+data class InvalidValue(val errorMessage: String)
+fun updateDiceSelection(diceBag: DiceBag, selectionIndex: Int, selectedCount: Int): Either<InvalidValue, DiceBag> {
+    val updateSelectedCount = { index: Int, diceSelection: DiceSelection ->
+        if (index == selectionIndex) {
+            diceSelection.copy(selectedCount = selectedCount)
+        } else {
+            diceSelection
+        }
+    }
+    val newList = diceBag.diceSelectionList.mapIndexed { x, y -> updateSelectedCount(x, y) }
+    return diceBag.copy(diceSelectionList = newList).right()
+}
