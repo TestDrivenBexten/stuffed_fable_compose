@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import arrow.core.Either
 import bexten.mobile.stuffed_fable_compose.ui.theme.Stuffed_fable_composeTheme
 
 fun getDieUIColor(dieColor: DieColor): Color {
@@ -53,7 +54,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Stuffed_fable_composeTheme {
-                DiceSelectionPanel(diceBag)
+                // DiceSelectionPanel(diceBag)
             }
         }
     }
@@ -75,7 +76,7 @@ fun DieButton(dieOrdinal: Int,
         colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
     ) {
         if (isSelected) {
-            val textColor = if (buttonColor == Color.Black) Color.White else Color.Black
+            val textColor = if (buttonColor == Color.Black || buttonColor == Color.Blue) Color.White else Color.Black
             Text(text = dieOrdinal.toString(), color = textColor)
         }
     }
@@ -99,17 +100,14 @@ fun DiceSelectionPanelRow(diceSelection: DiceSelection, updateDiceSelectionCount
 }
 
 @Composable
-fun DiceSelectionPanel(diceBag: DiceBag) {
+fun DiceSelectionPanel(diceBag: DiceBag, updateDiceSelectionCount: (Int, Int) -> Unit ) {
     var isExpanded by remember { mutableStateOf(true) }
-    val updateBlackDiceSelection: (Int) -> Unit =
-        { x: Int -> {  } }
 
-    val updateDiceSelectionCount = { x: Int -> println(x) }
     Column {
         Text(text = "Dice Drawn", modifier = Modifier.clickable { isExpanded = !isExpanded })
         if (isExpanded) {
-            diceBag.diceSelectionList.map { diceSelection ->
-                DiceSelectionPanelRow(diceSelection, updateDiceSelectionCount)
+            diceBag.diceSelectionList.mapIndexed { index, diceSelection ->
+                DiceSelectionPanelRow(diceSelection) { x -> updateDiceSelectionCount(index, x) }
             }
         }
     }
@@ -147,7 +145,16 @@ fun StuffedFablesHeaderPreview() {
 @Preview(showBackground = true)
 @Composable
 fun DiceSelectionPanelPreview() {
+    var diceBag by remember { mutableStateOf(diceBag) }
+    val updateDiceSelectionCount: (Int, Int) -> Unit = { x, y ->
+        val newDiceBag = updateDiceSelection(diceBag, x, y).getOrNull()
+        if (newDiceBag != null) {
+            diceBag = newDiceBag
+            println(diceBag)
+        }
+    }
+
     Stuffed_fable_composeTheme {
-        DiceSelectionPanel(diceBag)
+        DiceSelectionPanel(diceBag, updateDiceSelectionCount)
     }
 }
