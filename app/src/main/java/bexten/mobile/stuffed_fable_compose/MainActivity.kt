@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Stuffed_fable_composeTheme {
-                DiceSelectionPanel()
+                DiceSelectionPanel(diceBag)
             }
         }
     }
@@ -99,7 +99,7 @@ fun DiceSelectionPanelRow(diceSelection: DiceSelection, updateDiceSelectionCount
 }
 
 @Composable
-fun DiceSelectionPanel() {
+fun DiceSelectionPanel(diceBag: DiceBag) {
     var isExpanded by remember { mutableStateOf(true) }
     val updateBlackDiceSelection: (Int) -> Unit =
         { x: Int -> {  } }
@@ -148,6 +148,6 @@ fun StuffedFablesHeaderPreview() {
 @Composable
 fun DiceSelectionPanelPreview() {
     Stuffed_fable_composeTheme {
-        DiceSelectionPanel()
+        DiceSelectionPanel(diceBag)
     }
 }
