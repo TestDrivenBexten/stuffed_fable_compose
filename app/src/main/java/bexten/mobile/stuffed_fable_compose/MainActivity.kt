@@ -53,7 +53,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Stuffed_fable_composeTheme {
-                // DiceSelectionPanel(diceBag)
+                StuffedFablesApp()
             }
         }
     }
@@ -144,6 +144,30 @@ fun DiceDrawPanel(diceBag: DiceBag, updateDiceToDrawCount: (Int, Int) -> Unit ) 
     }
 }
 
+@Composable
+fun StuffedFablesApp() {
+    var diceBag by remember { mutableStateOf(diceBag) }
+    val updateDiceSelectionCount: (Int, Int) -> Unit = { x, y ->
+        val newDiceBag = updateDiceSelectionDiceCount(diceBag, x, y).getOrNull()
+        if (newDiceBag != null) {
+            diceBag = newDiceBag
+        }
+    }
+    val updateDrawCountCount: (Int, Int) -> Unit = { x, y ->
+        val newDiceBag = updateDiceSelectionToDrawCount(diceBag, x, y).getOrNull()
+        if (newDiceBag != null) {
+            diceBag = newDiceBag
+        }
+    }
+    Stuffed_fable_composeTheme {
+        Column {
+            StuffedFablesHeader()
+            DiceSelectionPanel(diceBag, updateDiceSelectionCount)
+            DiceDrawPanel(diceBag, updateDrawCountCount)
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DiceSelectionRowPreview() {
@@ -172,6 +196,15 @@ fun StuffedFablesHeaderPreview() {
         StuffedFablesHeader()
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun StuffedFablesAppPreview() {
+    Stuffed_fable_composeTheme {
+        StuffedFablesApp()
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
