@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import arrow.core.Either
 import bexten.mobile.stuffed_fable_compose.ui.theme.Stuffed_fable_composeTheme
 
 fun getDieUIColor(dieColor: DieColor): Color {
@@ -38,13 +37,13 @@ fun getDieUIColor(dieColor: DieColor): Color {
 
 var diceBag = DiceBag(
     diceSelectionList = listOf(
-        DiceSelection(blackDie, 0, 5),
-        DiceSelection(whiteDie, 0, 5),
-        DiceSelection(redDie, 0, 5),
-        DiceSelection(greenDie, 0, 5),
-        DiceSelection(yellowDie, 0, 5),
-        DiceSelection(blueDie, 0, 5),
-        DiceSelection(purpleDie, 0, 5),
+        DiceSelection(blackDie, 0, 0, 5),
+        DiceSelection(whiteDie, 0, 0, 5),
+        DiceSelection(redDie, 0, 0, 5),
+        DiceSelection(greenDie, 0, 0, 5),
+        DiceSelection(yellowDie, 0, 0, 5),
+        DiceSelection(blueDie, 0, 0, 5),
+        DiceSelection(purpleDie, 0, 0, 5),
     )
 )
 
@@ -113,11 +112,42 @@ fun DiceSelectionPanel(diceBag: DiceBag, updateDiceSelectionCount: (Int, Int) ->
     }
 }
 
+@Composable
+fun DiceSelectionDrawPanel(diceSelection: DiceSelection) {
+    val diceToChooseFrom = diceSelection.maxDice - diceSelection.selectedCount
+    val buttonColor = getDieUIColor(diceSelection.die.dieColor)
+    Row {
+        LazyRow {
+            items(diceToChooseFrom) {
+                    dice -> DieButton(dice + 1, buttonColor,
+                dice < diceSelection.diceToDraw, { x: Int -> println() })
+            }
+        }
+        OutlinedButton(onClick = { println() }) {
+            Text(text = "X")
+        }
+    }
+}
+
+@Composable
+fun DiceDrawPanel(diceBag: DiceBag) {
+    var isExpanded by remember { mutableStateOf(true) }
+
+    Column {
+        Text(text = "Dice to Draw", modifier = Modifier.clickable { isExpanded = !isExpanded })
+        if (isExpanded) {
+            diceBag.diceSelectionList.mapIndexed { index, diceSelection ->
+                DiceSelectionDrawPanel(diceSelection)
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun DiceSelectionRowPreview() {
     Stuffed_fable_composeTheme {
-        val selectedBlackDice = DiceSelection(blackDie, 3, 5)
+        val selectedBlackDice = DiceSelection(blackDie, 3, 0, 5)
         DiceSelectionPanelRow(selectedBlackDice, { x: Int -> println(x) })
     }
 }
@@ -156,5 +186,26 @@ fun DiceSelectionPanelPreview() {
 
     Stuffed_fable_composeTheme {
         DiceSelectionPanel(diceBag, updateDiceSelectionCount)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DiceSelectionDrawPanelPreview() {
+    val diceSelection = DiceSelection(blackDie, 3, 0, 5)
+    Stuffed_fable_composeTheme {
+        DiceSelectionDrawPanel(diceSelection)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DiceDrawPanelPreview() {
+    val threeBlackDiceBag = updateDiceSelection(diceBag, 1, 3).getOrNull()
+    if(threeBlackDiceBag != null) {
+        var diceBag by remember { mutableStateOf(threeBlackDiceBag) }
+        Stuffed_fable_composeTheme {
+            DiceDrawPanel(diceBag)
+        }
     }
 }

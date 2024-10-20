@@ -10,7 +10,7 @@ class DiceBagTest {
         val blackDie = createD6Die(DieColor.BLACK)
         var diceBag = DiceBag(
             diceSelectionList = listOf(
-                DiceSelection(blackDie, 0, 5),
+                DiceSelection(blackDie, 0, 0,5),
             )
         )
 

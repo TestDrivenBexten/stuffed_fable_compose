@@ -8,7 +8,7 @@ enum class DieColor {
 }
 
 data class Die(val faceValues: List<Int>, val dieColor: DieColor)
-data class DiceSelection(val die: Die, val selectedCount: Int, val maxDice: Int)
+data class DiceSelection(val die: Die, val selectedCount: Int, val diceToDraw: Int, val maxDice: Int)
 data class DiceBag(val diceSelectionList: List<DiceSelection>)
 
 fun createD6Die(dieColor: DieColor): Die {
