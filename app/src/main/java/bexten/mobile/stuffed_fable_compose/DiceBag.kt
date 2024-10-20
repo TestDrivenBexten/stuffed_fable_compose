@@ -24,10 +24,22 @@ val blueDie = createD6Die(DieColor.BLUE)
 val purpleDie = createD6Die(DieColor.PURPLE)
 
 data class InvalidValue(val errorMessage: String)
-fun updateDiceSelection(diceBag: DiceBag, selectionIndex: Int, selectedCount: Int): Either<InvalidValue, DiceBag> {
+fun updateDiceSelectionDiceCount(diceBag: DiceBag, selectionIndex: Int, selectedCount: Int): Either<InvalidValue, DiceBag> {
     val updateSelectedCount = { index: Int, diceSelection: DiceSelection ->
         if (index == selectionIndex) {
             diceSelection.copy(selectedCount = selectedCount)
+        } else {
+            diceSelection
+        }
+    }
+    val newList = diceBag.diceSelectionList.mapIndexed { x, y -> updateSelectedCount(x, y) }
+    return diceBag.copy(diceSelectionList = newList).right()
+}
+
+fun updateDiceSelectionToDrawCount(diceBag: DiceBag, selectionIndex: Int, toDrawCount: Int): Either<InvalidValue, DiceBag> {
+    val updateSelectedCount = { index: Int, diceSelection: DiceSelection ->
+        if (index == selectionIndex) {
+            diceSelection.copy(diceToDraw = toDrawCount)
         } else {
             diceSelection
         }

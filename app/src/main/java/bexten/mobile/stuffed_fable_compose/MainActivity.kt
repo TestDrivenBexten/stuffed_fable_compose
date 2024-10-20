@@ -113,31 +113,32 @@ fun DiceSelectionPanel(diceBag: DiceBag, updateDiceSelectionCount: (Int, Int) ->
 }
 
 @Composable
-fun DiceSelectionDrawPanel(diceSelection: DiceSelection) {
+fun DiceSelectionDrawPanel(diceSelection: DiceSelection, updateDiceToDrawCount: (Int) -> Unit) {
     val diceToChooseFrom = diceSelection.maxDice - diceSelection.selectedCount
     val buttonColor = getDieUIColor(diceSelection.die.dieColor)
     Row {
         LazyRow {
             items(diceToChooseFrom) {
                     dice -> DieButton(dice + 1, buttonColor,
-                dice < diceSelection.diceToDraw, { x: Int -> println() })
+                dice < diceSelection.diceToDraw
+            ) { x: Int -> updateDiceToDrawCount(x) }
             }
         }
-        OutlinedButton(onClick = { println() }) {
+        OutlinedButton(onClick = { updateDiceToDrawCount(0) }) {
             Text(text = "X")
         }
     }
 }
 
 @Composable
-fun DiceDrawPanel(diceBag: DiceBag) {
+fun DiceDrawPanel(diceBag: DiceBag, updateDiceToDrawCount: (Int, Int) -> Unit ) {
     var isExpanded by remember { mutableStateOf(true) }
 
     Column {
         Text(text = "Dice to Draw", modifier = Modifier.clickable { isExpanded = !isExpanded })
         if (isExpanded) {
             diceBag.diceSelectionList.mapIndexed { index, diceSelection ->
-                DiceSelectionDrawPanel(diceSelection)
+                DiceSelectionDrawPanel(diceSelection) { x: Int -> updateDiceToDrawCount(index, x) }
             }
         }
     }
@@ -177,10 +178,9 @@ fun StuffedFablesHeaderPreview() {
 fun DiceSelectionPanelPreview() {
     var diceBag by remember { mutableStateOf(diceBag) }
     val updateDiceSelectionCount: (Int, Int) -> Unit = { x, y ->
-        val newDiceBag = updateDiceSelection(diceBag, x, y).getOrNull()
+        val newDiceBag = updateDiceSelectionDiceCount(diceBag, x, y).getOrNull()
         if (newDiceBag != null) {
             diceBag = newDiceBag
-            println(diceBag)
         }
     }
 
@@ -194,18 +194,21 @@ fun DiceSelectionPanelPreview() {
 fun DiceSelectionDrawPanelPreview() {
     val diceSelection = DiceSelection(blackDie, 3, 0, 5)
     Stuffed_fable_composeTheme {
-        DiceSelectionDrawPanel(diceSelection)
+        DiceSelectionDrawPanel(diceSelection) { x: Int -> println(x) }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun DiceDrawPanelPreview() {
-    val threeBlackDiceBag = updateDiceSelection(diceBag, 1, 3).getOrNull()
-    if(threeBlackDiceBag != null) {
-        var diceBag by remember { mutableStateOf(threeBlackDiceBag) }
-        Stuffed_fable_composeTheme {
-            DiceDrawPanel(diceBag)
+    var diceBag by remember { mutableStateOf(diceBag) }
+    val updateDrawCountCount: (Int, Int) -> Unit = { x, y ->
+        val newDiceBag = updateDiceSelectionToDrawCount(diceBag, x, y).getOrNull()
+        if (newDiceBag != null) {
+            diceBag = newDiceBag
         }
+    }
+    Stuffed_fable_composeTheme {
+        DiceDrawPanel(diceBag, updateDrawCountCount)
     }
 }
