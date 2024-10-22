@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -94,6 +97,8 @@ fun DiceSelectionPanel(diceBag: DiceBag, updateDiceSelectionCount: (Int, Int) ->
 @Composable
 fun StuffedFablesApp() {
     var diceBag by remember { mutableStateOf(diceBag) }
+    var selectedTab by remember { mutableIntStateOf(0) }
+    val titles = listOf("Dice Selected", "Dice To Draw")
     val updateDiceSelectionCount: (Int, Int) -> Unit = { x, y ->
         val newDiceBag = updateDiceSelectionDiceCount(diceBag, x, y).getOrNull()
         if (newDiceBag != null) {
@@ -106,11 +111,17 @@ fun StuffedFablesApp() {
             diceBag = newDiceBag
         }
     }
-    Stuffed_fable_composeTheme {
-        Column {
-            StuffedFablesHeader()
-            DiceSelectionPanel(diceBag, updateDiceSelectionCount)
-            DiceDrawPanel(diceBag, updateDrawCountCount)
+
+    Column {
+        StuffedFablesHeader()
+        TabRow(selectedTabIndex = selectedTab) {
+            titles.forEachIndexed { index, title ->
+                Tab(text = { Text(title) }, selected = selectedTab == index, onClick = { selectedTab = index })
+            }
+        }
+        when(selectedTab) {
+            0 -> DiceSelectionPanel(diceBag, updateDiceSelectionCount)
+            1 -> DiceDrawPanel(diceBag, updateDrawCountCount)
         }
     }
 }
@@ -139,7 +150,6 @@ fun StuffedFablesAppPreview() {
         StuffedFablesApp()
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
