@@ -15,26 +15,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import bexten.mobile.stuffed_fable_compose.ui.theme.Stuffed_fable_composeTheme
 
-enum class ComparisonOperator {
-    NONE,
-    LESS_THAN,
-    LESS_THAN_OR_EQUAL,
-    EQUAL,
-    GREATER_THAN_OR_EQUAL,
-    GREATER_THAN
-}
-
-fun getComparisonOperatorText(comparisonOperator: ComparisonOperator): String {
-    return when (comparisonOperator) {
-        ComparisonOperator.NONE -> ""
-        ComparisonOperator.LESS_THAN -> "<"
-        ComparisonOperator.LESS_THAN_OR_EQUAL -> "<="
-        ComparisonOperator.EQUAL -> "="
-        ComparisonOperator.GREATER_THAN_OR_EQUAL -> ">="
-        ComparisonOperator.GREATER_THAN -> ">"
-    }
-}
-
 @Composable
 fun OperatorDropdown(comparisonOperator: ComparisonOperator) {
     var mExpanded by remember { mutableStateOf(false) }
@@ -116,7 +96,7 @@ fun OperatorDropdownPreview() {
 @Preview(showBackground = true)
 @Composable
 fun DiceSelectionDrawPanelPreview() {
-    val diceSelection = DiceSelection(blackDie, 3, 0, 5)
+    val diceSelection = DiceSelection(blackDie, 3, 0, 5, ComparisonOperator.NONE)
     Stuffed_fable_composeTheme {
         DiceSelectionDrawPanel(diceSelection) { x: Int -> println(x) }
     }

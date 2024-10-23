@@ -19,13 +19,13 @@ import bexten.mobile.stuffed_fable_compose.ui.theme.Stuffed_fable_composeTheme
 
 var diceBag = DiceBag(
     diceSelectionList = listOf(
-        DiceSelection(blackDie, 0, 0, 5),
-        DiceSelection(whiteDie, 0, 0, 5),
-        DiceSelection(redDie, 0, 0, 5),
-        DiceSelection(greenDie, 0, 0, 5),
-        DiceSelection(yellowDie, 0, 0, 5),
-        DiceSelection(blueDie, 0, 0, 5),
-        DiceSelection(purpleDie, 0, 0, 5),
+        DiceSelection(blackDie, 0, 0, 5, ComparisonOperator.NONE),
+        DiceSelection(whiteDie, 0, 0, 5, ComparisonOperator.NONE),
+        DiceSelection(redDie, 0, 0, 5, ComparisonOperator.NONE),
+        DiceSelection(greenDie, 0, 0, 5, ComparisonOperator.NONE),
+        DiceSelection(yellowDie, 0, 0, 5, ComparisonOperator.NONE),
+        DiceSelection(blueDie, 0, 0, 5, ComparisonOperator.NONE),
+        DiceSelection(purpleDie, 0, 0, 5, ComparisonOperator.NONE),
     )
 )
 

@@ -8,8 +8,28 @@ enum class DieColor {
     BLACK, WHITE, RED, GREEN, YELLOW, BLUE, PURPLE
 }
 
+enum class ComparisonOperator {
+    NONE,
+    LESS_THAN,
+    LESS_THAN_OR_EQUAL,
+    EQUAL,
+    GREATER_THAN_OR_EQUAL,
+    GREATER_THAN
+}
+
+fun getComparisonOperatorText(comparisonOperator: ComparisonOperator): String {
+    return when (comparisonOperator) {
+        ComparisonOperator.NONE -> ""
+        ComparisonOperator.LESS_THAN -> "<"
+        ComparisonOperator.LESS_THAN_OR_EQUAL -> "<="
+        ComparisonOperator.EQUAL -> "="
+        ComparisonOperator.GREATER_THAN_OR_EQUAL -> ">="
+        ComparisonOperator.GREATER_THAN -> ">"
+    }
+}
+
 data class Die(val faceValues: List<Int>, val dieColor: DieColor)
-data class DiceSelection(val die: Die, val selectedCount: Int, val diceToDraw: Int, val maxDice: Int)
+data class DiceSelection(val die: Die, val selectedCount: Int, val diceToDraw: Int, val maxDice: Int, val comparisonOperator: ComparisonOperator)
 data class DiceBag(val diceSelectionList: List<DiceSelection>)
 
 fun createD6Die(dieColor: DieColor): Die {
