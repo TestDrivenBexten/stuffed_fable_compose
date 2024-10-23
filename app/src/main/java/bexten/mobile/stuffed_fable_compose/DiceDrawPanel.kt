@@ -35,14 +35,9 @@ fun DiceSelectionDrawPanel(diceSelection: DiceSelection, updateDiceToDrawCount: 
 
 @Composable
 fun DiceDrawPanel(diceBag: DiceBag, updateDiceToDrawCount: (Int, Int) -> Unit ) {
-    var isExpanded by remember { mutableStateOf(true) }
-
     Column {
-        Text(text = "Dice to Draw", modifier = Modifier.clickable { isExpanded = !isExpanded })
-        if (isExpanded) {
-            diceBag.diceSelectionList.mapIndexed { index, diceSelection ->
-                DiceSelectionDrawPanel(diceSelection) { x: Int -> updateDiceToDrawCount(index, x) }
-            }
+        diceBag.diceSelectionList.mapIndexed { index, diceSelection ->
+            DiceSelectionDrawPanel(diceSelection) { x: Int -> updateDiceToDrawCount(index, x) }
         }
     }
 }
