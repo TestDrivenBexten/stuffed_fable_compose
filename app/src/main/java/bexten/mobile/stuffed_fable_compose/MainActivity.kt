@@ -14,21 +14,8 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import bexten.mobile.stuffed_fable_compose.ui.theme.Stuffed_fable_composeTheme
-
-fun getDieUIColor(dieColor: DieColor): Color {
-    return when (dieColor) {
-        DieColor.BLACK -> Color.Black
-        DieColor.WHITE -> Color.White
-        DieColor.RED -> Color.Red
-        DieColor.GREEN -> Color.Green
-        DieColor.YELLOW -> Color.Yellow
-        DieColor.BLUE -> Color.Blue
-        DieColor.PURPLE -> Color.Magenta
-    }
-}
 
 var diceBag = DiceBag(
     diceSelectionList = listOf(

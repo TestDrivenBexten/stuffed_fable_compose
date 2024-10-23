@@ -1,5 +1,6 @@
 package bexten.mobile.stuffed_fable_compose
 
+import androidx.compose.ui.graphics.Color
 import arrow.core.Either
 import arrow.core.right
 
@@ -13,6 +14,18 @@ data class DiceBag(val diceSelectionList: List<DiceSelection>)
 
 fun createD6Die(dieColor: DieColor): Die {
     return Die(listOf(1, 2, 3, 4, 5, 6), dieColor)
+}
+
+fun getDieUIColor(dieColor: DieColor): Color {
+    return when (dieColor) {
+        DieColor.BLACK -> Color.Black
+        DieColor.WHITE -> Color.White
+        DieColor.RED -> Color.Red
+        DieColor.GREEN -> Color.Green
+        DieColor.YELLOW -> Color.Yellow
+        DieColor.BLUE -> Color.Blue
+        DieColor.PURPLE -> Color.Magenta
+    }
 }
 
 val blackDie = createD6Die(DieColor.BLACK)

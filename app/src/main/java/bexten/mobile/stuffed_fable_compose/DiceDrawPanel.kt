@@ -3,6 +3,8 @@ package bexten.mobile.stuffed_fable_compose
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,10 +15,57 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.tooling.preview.Preview
 import bexten.mobile.stuffed_fable_compose.ui.theme.Stuffed_fable_composeTheme
 
+enum class ComparisonOperator {
+    NONE,
+    LESS_THAN,
+    LESS_THAN_OR_EQUAL,
+    EQUAL,
+    GREATER_THAN_OR_EQUAL,
+    GREATER_THAN
+}
+
+fun getComparisonOperatorText(comparisonOperator: ComparisonOperator): String {
+    return when (comparisonOperator) {
+        ComparisonOperator.NONE -> ""
+        ComparisonOperator.LESS_THAN -> "<"
+        ComparisonOperator.LESS_THAN_OR_EQUAL -> "<="
+        ComparisonOperator.EQUAL -> "="
+        ComparisonOperator.GREATER_THAN_OR_EQUAL -> ">="
+        ComparisonOperator.GREATER_THAN -> ">"
+    }
+}
+
+@Composable
+fun OperatorDropdown(comparisonOperator: ComparisonOperator) {
+    var mExpanded by remember { mutableStateOf(false) }
+    var mSelectedText by remember { mutableStateOf(getComparisonOperatorText(comparisonOperator)) }
+
+    val operatorList = ComparisonOperator.entries.toList()
+
+    Column {
+        OutlinedButton(onClick = { mExpanded = !mExpanded }) {
+            Text(text = mSelectedText)
+        }
+        DropdownMenu(
+            expanded = mExpanded,
+            onDismissRequest = { mExpanded = false }
+        ) {
+            operatorList.forEach { operator ->
+                DropdownMenuItem(onClick = {
+                    mSelectedText = getComparisonOperatorText(operator)
+                    mExpanded = false
+                },
+                text = { Text(text = getComparisonOperatorText(operator)) })
+            }
+        }
+    }
+}
+
 @Composable
 fun DiceSelectionDrawPanel(diceSelection: DiceSelection, updateDiceToDrawCount: (Int) -> Unit) {
     val diceToChooseFrom = diceSelection.maxDice - diceSelection.selectedCount
     val buttonColor = getDieUIColor(diceSelection.die.dieColor)
+
     Row {
         LazyRow {
             items(diceToChooseFrom) {
@@ -25,6 +74,7 @@ fun DiceSelectionDrawPanel(diceSelection: DiceSelection, updateDiceToDrawCount: 
             ) { x: Int -> updateDiceToDrawCount(x) }
             }
         }
+        OperatorDropdown(ComparisonOperator.NONE)
         OutlinedButton(onClick = { updateDiceToDrawCount(0) }) {
             Text(text = "X")
         }
@@ -52,6 +102,14 @@ fun DiceDrawPanelPreview() {
     }
     Stuffed_fable_composeTheme {
         DiceDrawPanel(diceBag, updateDrawCountCount)
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun OperatorDropdownPreview() {
+    Stuffed_fable_composeTheme {
+        OperatorDropdown(comparisonOperator = ComparisonOperator.NONE)
     }
 }
 
