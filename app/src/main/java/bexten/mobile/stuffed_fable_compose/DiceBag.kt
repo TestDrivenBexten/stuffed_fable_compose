@@ -80,3 +80,7 @@ fun updateDiceSelectionToDrawCount(diceBag: DiceBag, selectionIndex: Int, toDraw
     val newList = diceBag.diceSelectionList.mapIndexed { x, y -> updateSelectedCount(x, y) }
     return diceBag.copy(diceSelectionList = newList).right()
 }
+
+fun calculateDiceDrawProbability(diceBag: DiceBag): Double {
+    return 1.0
+}

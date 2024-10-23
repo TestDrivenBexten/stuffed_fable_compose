@@ -63,10 +63,15 @@ fun DiceSelectionDrawPanel(diceSelection: DiceSelection, updateDiceToDrawCount: 
 
 @Composable
 fun DiceDrawPanel(diceBag: DiceBag, updateDiceToDrawCount: (Int, Int) -> Unit ) {
+    var diceDrawProbability by remember { mutableStateOf(0.0) }
     Column {
         diceBag.diceSelectionList.mapIndexed { index, diceSelection ->
             DiceSelectionDrawPanel(diceSelection) { x: Int -> updateDiceToDrawCount(index, x) }
         }
+        OutlinedButton(onClick = { diceDrawProbability = calculateDiceDrawProbability(diceBag) }) {
+            Text(text = "Calculate")
+        }
+        Text(text = "Result: $diceDrawProbability")
     }
 }
 
