@@ -48,6 +48,10 @@ fun getDieUIColor(dieColor: DieColor): Color {
     }
 }
 
+fun getAvailableDiceCount(diceSelection: DiceSelection): Int {
+    return diceSelection.maxDice - diceSelection.selectedCount
+}
+
 val blackDie = createD6Die(DieColor.BLACK)
 val whiteDie = createD6Die(DieColor.WHITE)
 val redDie = createD6Die(DieColor.RED)
