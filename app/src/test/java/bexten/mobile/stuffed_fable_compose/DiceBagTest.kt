@@ -8,9 +8,9 @@ class DiceBagTest {
     fun shouldUpdateSelectedCountForDiceBag() {
         // Arrange
         val blackDie = createD6Die(DieColor.BLACK)
-        var diceBag = DiceBag(
+        val diceBag = DiceBag(
             diceSelectionList = listOf(
-                DiceSelection(blackDie, 0, 0,5),
+                DiceSelection(blackDie, 0, 0,5, ComparisonOperator.NONE),
             )
         )
 
@@ -27,9 +27,9 @@ class DiceBagTest {
     fun shouldUpdateDrawCountForDiceBag() {
         // Arrange
         val blackDie = createD6Die(DieColor.BLACK)
-        var diceBag = DiceBag(
+        val diceBag = DiceBag(
             diceSelectionList = listOf(
-                DiceSelection(blackDie, 0, 0,5),
+                DiceSelection(blackDie, 0, 0,5, ComparisonOperator.NONE),
             )
         )
 
